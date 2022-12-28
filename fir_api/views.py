@@ -87,9 +87,15 @@ class ArtifactViewSet(ListModelMixin, RetrieveModelMixin, viewsets.GenericViewSe
     def get_queryset(self):
          queryset = Artifact.objects.all()
          id = self.request.query_params.get('id', None)
+         value = self.request.query_params.get('value', None)
+         incidents = self.request.query_params.get('incidents', None)
          q = Q()
          if id is not None:
             q = q & Q(id__exact=id)
+         if value is not None:
+            q = q & Q(value__contains=value)
+         if incidents is not None:
+            q = q & Q(incidents__exact=incidents)
          queryset = queryset.filter(q)
          return queryset
 
