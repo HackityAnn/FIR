@@ -105,6 +105,18 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
     permission_classes = (IsAuthenticated, IsIncidentHandler)
 
+    def get_queryset(self):
+         queryset = Comments.objects.all()
+         id = self.request.query_params.get('id', None)
+         incident = self.request.query_params.get('incident', None)
+         q = Q()
+         if id is not None:
+            q = q & Q(id__exact=id)
+         if incident is not None:
+            q = q & Q(incident__exact=incident)
+         queryset = queryset.filter(q)
+         return queryset
+
     def perform_create(self, serializer):
         serializer.save(opened_by=self.request.user)
 
