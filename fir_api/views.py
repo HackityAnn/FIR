@@ -187,19 +187,25 @@ class NuggetViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsIncidentHandler)
 
     def get_queryset(self):
-         queryset = Nugget.objects.all()
-         id = self.request.query_params.get('id', None)
-         incident_id = self.request.query_params.get('incident_id', None)
-         q = Q()
-         if incident_id is not None:
-            q = q & Q(incident_id__exact=incident_id)
-         if id is not None:
-            q = q & Q(id__exact=id)
-         queryset = queryset.filter(q)
-         return queryset
+        queryset = Nugget.objects.all()
+        id = self.request.query_params.get('id', None)
+        incident_id = self.request.query_params.get('incident_id', None)
+        q = Q()
+        if incident_id is not None:
+           q = q & Q(incident_id__exact=incident_id)
+        if id is not None:
+           q = q & Q(id__exact=id)
+        queryset = queryset.filter(q)
+        return queryset
 
     def perform_create(self, serializer):
-        nugget = serializer.save(found_by=self.request.user)
+        serializer.save(found_by=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def perform_destroy(self, serializer):
+        serializer.destroy()
 
 
 # Token Generation ===========================================================
