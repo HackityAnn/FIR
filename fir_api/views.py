@@ -121,7 +121,7 @@ class FileViewSet(ListModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     def get_queryset(self):
          queryset = File.objects.all()
          id = self.request.query_params.get('id', None)
-         incidents = self.request.query_params.get('incident', None)
+         incident = self.request.query_params.get('incident', None)
          q = Q()
          if id is not None:
             q = q & Q(id__exact=id)
