@@ -148,7 +148,7 @@ class NuggetViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsIncidentHandler)
 
     def get_queryset(self):
-         queryset = Incident.objects.all()
+         queryset = Nugget.objects.all()
          incident_id = self.request.query_params.get('incident_id', None)
          q = Q()
          if incident_id is not None:
