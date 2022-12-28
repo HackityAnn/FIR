@@ -145,8 +145,16 @@ class IncidentCategoriesViewSet(viewsets.ReadOnlyModelViewSet):
 class NuggetViewSet(viewsets.ModelViewSet):
     queryset = Nugget.objects.all()
     serializer_class = NuggetSerializer
-    lookup_field = 'id'
     permission_classes = (IsAuthenticated, IsIncidentHandler)
+
+    def get_queryset(self):
+         queryset = Incident.objects.all()
+         incident_id = self.request.query_params.get('incident_id', None)
+         q = Q()
+         if incident_id is not None:
+            q = q & Q(incident_id__exact=incident_id)
+         queryset = queryset.filter(q)
+         return queryset
 
     def perform_create(self, serializer):
         nugget = serializer.save(found_by=self.request.user)
