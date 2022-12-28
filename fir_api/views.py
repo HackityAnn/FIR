@@ -205,7 +205,7 @@ class NuggetViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def perform_destroy(self, serializer):
-        serializer.destroy()
+        serializer.delete()
 
 
 # Token Generation ===========================================================
