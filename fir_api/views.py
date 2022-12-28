@@ -44,12 +44,15 @@ class IncidentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
          queryset = Incident.objects.all()
+         id = self.request.query_params.get('id', None)
          category = self.request.query_params.get('category', None)
          subject = self.request.query_params.get('subject', None)
          description = self.request.query_params.get('description', None)
          bl = self.request.query_params.get('bl', None)
          status = self.request.query_params.get('status', None)
          q = Q()
+         if id is not None:
+            q = q & Q(id__exact=id)
          if category is not None:
              q = q & Q(category__name__icontains=category)
          if subject is not None:
