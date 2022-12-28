@@ -2,7 +2,6 @@ dj-database-url
 dj-email-url
 environs
 future
-mysqlclient
 Django
 djangorestframework
 pymongo
@@ -14,3 +13,8 @@ bleach
 django-querysetsequence
 django-otp-yubikey
 django-two-factor-auth[phonenumbers]
+psycopg2
+git+https://github.com/certsocietegenerale/abuse_finder.git#egg=abuse_finder
+celery[redis]
+redis
+uwsgi

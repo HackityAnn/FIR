@@ -19,6 +19,7 @@ router.register(r'labels', views.LabelViewSet)
 router.register(r'attributes', views.AttributeViewSet)
 router.register(r'businesslines', views.BusinessLinesViewSet)
 router.register(r'incident_categories', views.IncidentCategoriesViewSet)
+router.register(r'nuggets', views.NuggetViewSet)
 
 # urls for core FIR components
 urlpatterns = [
