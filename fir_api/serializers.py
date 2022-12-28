@@ -101,5 +101,5 @@ class IncidentCategoriesSerializer(serializers.ModelSerializer):
 class NuggetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nugget
-        fields = ('raw_data', 'source', 'start_timestampe', 'end_timestamp', 'interpretation', 'incident')
+        fields = ('raw_data', 'source', 'start_timestamp', 'end_timestamp', 'interpretation', 'incident')
         read_only_fields = ('id', 'found_by')
