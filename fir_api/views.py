@@ -84,6 +84,15 @@ class ArtifactViewSet(ListModelMixin, RetrieveModelMixin, viewsets.GenericViewSe
     lookup_value_regex = '.+'
     permission_classes = (IsAuthenticated, IsIncidentHandler)
 
+    def get_queryset(self):
+         queryset = Artifact.objects.all()
+         id = self.request.query_params.get('id', None)
+         q = Q()
+         if id is not None:
+            q = q & Q(id__exact=id)
+         queryset = queryset.filter(q)
+         return queryset
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
