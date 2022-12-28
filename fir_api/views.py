@@ -118,6 +118,18 @@ class FileViewSet(ListModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = FileSerializer
     permission_classes = (IsAuthenticated, IsIncidentHandler)
 
+    def get_queryset(self):
+         queryset = File.objects.all()
+         id = self.request.query_params.get('id', None)
+         incidents = self.request.query_params.get('incident', None)
+         q = Q()
+         if id is not None:
+            q = q & Q(id__exact=id)
+         if incident is not None:
+            q = q & Q(incident__exact=incident)
+         queryset = queryset.filter(q)
+         return queryset
+
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
     def download(self, request, pk):
         return do_download(request, pk)
