@@ -41,6 +41,7 @@ class IncidentViewSet(viewsets.ModelViewSet):
     queryset = Incident.objects.all()
     serializer_class = IncidentSerializer
     permission_classes = (IsAuthenticated, IsIncidentHandler)
+    http_method_names = ['patch', 'get', 'post']
 
     def get_queryset(self):
          queryset = Incident.objects.all()
