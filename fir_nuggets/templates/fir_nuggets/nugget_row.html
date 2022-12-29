@@ -10,9 +10,6 @@
 {% if mode == 'raw' %}
 			<td colspan='5'>
 				<div class='nugget_raw_data'>
-					{% for item in n.raw_data %}
-						{{n.raw_data[item]}}: {{item}}
-					{% endfor %}
 					<pre>{{n.raw_data}}</pre>
 				</div>
 			</td>
