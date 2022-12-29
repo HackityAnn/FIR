@@ -199,10 +199,14 @@ class NuggetViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(found_by=self.request.user)
+        instance = serializer.save(found_by=self.request.user)
+        e = get_object_or_404(Incident.authorization.for_user(self.request.user, 'incidents.handle_incidents'), pk=instance.incident_id)
+        e.refresh_artifacts(instance.raw_data)
 
     def perform_update(self, serializer):
-        serializer.save()
+        instance = serializer.save()
+        e = get_object_or_404(Incident.authorization.for_user(self.request.user, 'incidents.handle_incidents'), pk=instance.incident_id)
+        e.refresh_artifacts(instance.raw_data)
 
     def perform_destroy(self, serializer):
         serializer.delete()
