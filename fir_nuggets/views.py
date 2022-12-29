@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
 from django.http import HttpResponse
-from json import dumps
+from json import dumps, loads, JSONDecodeError
 
 from incidents.authorization.decorator import authorization_required
 from incidents.models import Incident
@@ -20,7 +20,15 @@ def list(request, event_id, authorization_target=None):
     else:
         e = authorization_target
     nuggets = e.nugget_set.all().order_by('start_timestamp')
-    return render(request, 'fir_nuggets/list.html', {'nuggets': nuggets})
+    json_raw_data = {}
+    for nugget in nuggets:
+        try:
+            raw_dict = loads(nugget.raw_data)
+            json_raw_data[nugget.id] = raw_dict
+        except JSONDecodeError:
+            json_raw_data[nugget.id] = {}
+
+    return render(request, 'fir_nuggets/list.html', {'nuggets': nuggets, 'json_raw_data': json_raw_data})
 
 
 @login_required

@@ -8,9 +8,19 @@
 			<td class='delete-nugget-row'>{% if can_handle_incident %}<a class='delete-nugget' data-url='{% url "nuggets:delete" n.id %}' data-id='{{n.id}}' href='#'><span class='glyphicon glyphicon-trash'></span></a>{% endif %}</td>
 {% endif %}
 {% if mode == 'raw' %}
-			<td colspan='5'>
-				<div class='nugget_raw_data'>
-					<pre>{{n.raw_data}}</pre>
-				</div>
-			</td>
+                        <td colspan='5'>
+                                <div class='nugget_raw_data'>
+                                        {% for key, value in json_raw_data.items %}
+                                                {% if key == n.id %}
+                                                        {% if value %}
+                                                                {% for raw_key, raw_value in value.items %}
+                                                                                <pre class='nugget_raw_data_pre'><b>{{raw_key}}:</b> {{raw_value}} <a href="javascript:toggle_raw({{n.id}})" style='float: right'>Collapse</a></pre>
+                                                                {% endfor %}
+                                                        {% else %}
+                                                                <pre class='nugget_raw_data_pre'>{{n.raw_data}}</pre>
+                                                        {% endif %}
+                                                {% endif %}
+                                        {% endfor %}
+                                </div>
+                        </td>
 {% endif %}
