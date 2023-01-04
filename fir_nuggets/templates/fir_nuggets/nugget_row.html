@@ -14,7 +14,7 @@
                                                 {% if key == n.id %}
                                                         {% if value %}
                                                                 {% for raw_key, raw_value in value.items %}
-                                                                                <pre class='nugget_raw_data_pre'><b>{{raw_key}}:</b> {{raw_value}} <a href="javascript:toggle_raw({{n.id}})" style='float: right'>Collapse</a></pre>
+                                                                                <pre class='nugget_raw_data_pre'><b>{{raw_key}}:</b> {{raw_value}} <a href="javascript:toggle_raw({{n.id}})">Collapse</a></pre>
                                                                 {% endfor %}
                                                         {% else %}
                                                                 <pre class='nugget_raw_data_pre'>{{n.raw_data}}</pre>
