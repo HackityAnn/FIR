@@ -1,5 +1,4 @@
 import requests
-import json
 
 graph_url = 'https://graph.microsoft.com/v1.0'
 

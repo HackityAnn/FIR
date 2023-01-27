@@ -1,8 +1,5 @@
 import json
 import msal
-import os
-import time
-
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
     oauth_settings = json.load(f)
