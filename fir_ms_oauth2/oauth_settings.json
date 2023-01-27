@@ -1,0 +1,7 @@
+{
+	"scopes": [],
+	"app_id": "APP_ID",
+	"app_secret": "CLIENT_SECRET",
+	"redirect": "https://fir.wealot.nl/ms_oauth2/redirect",
+	"auth_url": "https://login.microsoftonline.com/TENANT_ID"
+}
