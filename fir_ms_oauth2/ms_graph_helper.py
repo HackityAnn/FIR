@@ -8,10 +8,3 @@ def get_user(token):
     params = {'$select': 'userPrincipalName,department,mail'}
     user = requests.get(f'{graph_url}/me', headers=headers, params=params)
     return user.json()
-
-def get_groups(token):
-    # Get the groups the user belongs to
-    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
-    data = {'securityEnabledOnly': True}
-    groups = requests.post(f'{graph_url}/me/getMemberGroups', headers=headers, json=data)
-    return groups.json()

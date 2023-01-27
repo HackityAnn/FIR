@@ -9,7 +9,7 @@ def home(request):
     return render(request, 'fir_ms_oauth2/home.html', context)
 
 def initialize_context(request):
-    context = {'user': request.session.get('user', None), 'groups': request.session.get('groups', None), 'token': request.session.get('token', None), 'token_cache': request.session.get('token_cache', None)}
+    context = {'user': request.session.get('user', None), 'token_cache': request.session.get('token_cache', None)}
     return context
 
 def sign_in(request):
@@ -30,10 +30,7 @@ def redirect(request):
 
     # Get the user's profile from graph API
     user = get_user(result['access_token'])
-    groups = get_groups(result['access_token'])
 
     # Store the user with the helper script
     store_user(request, user)
-    store_groups(request, groups)
-    store_token(request, result['access_token'])
     return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
