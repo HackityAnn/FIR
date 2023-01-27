@@ -41,7 +41,7 @@ def get_sign_in_flow():
 
 def save_cache_after_redirect(request):
     cache = load_cache(request)
-    save_cache(request, cache)
+    request.session['token_cache'] = cache.serialize()
     return
 
 
