@@ -9,7 +9,7 @@ def home(request):
     return render(request, 'fir_ms_oauth2/home.html', context)
 
 def initialize_context(request):
-    context = {'user': request.session.get('user', None), 'groups': request.session.get('groups', None), 'token': request.session.get('token', None)}
+    context = {'user': request.session.get('user', None), 'groups': request.session.get('groups', None), 'token': request.session.get('token', None), 'token_cache': request.session.get('token_cache', None)}
     return context
 
 def sign_in(request):
