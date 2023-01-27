@@ -56,6 +56,8 @@ def store_user(request, user):
     request.session['user'] =  str(user)
     return
 
+def store_groups(request, groups):
+    request.session['groups'] = str(groups)
 
 def get_token(request):
     cache = load_cache(request)
