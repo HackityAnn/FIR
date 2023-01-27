@@ -12,5 +12,6 @@ def get_user(token):
 def get_groups(token):
     # Get the groups the user belongs to
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+    data = {'securityEnabledOnly': True}
     groups = requests.post(f'{graph_url}/me/getMemberGroups', headers=headers)
     return groups.json()
