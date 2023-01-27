@@ -22,7 +22,7 @@ def sign_in(request):
 def sign_out(request):
     # Clear token and user
     remove_user_and_token(request)
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('fir_oauth2:home'))
 
 def redirect(request):
     # Make the token request
@@ -33,4 +33,4 @@ def redirect(request):
 
     # Store the user with the helper script
     store_user(request, user)
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('fir_oauth2:home'))
