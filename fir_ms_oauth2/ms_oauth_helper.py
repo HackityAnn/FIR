@@ -53,12 +53,7 @@ def get_token_from_code(request):
 
 
 def store_user(request, user):
-    request.session['user'] = {
-        'is_authenticated': True,
-        'name': user['displayName'],
-        'email': user['mail'] if (user['mail'] != None) else user['userPrincipalName'],
-        'timeZone': user['mailboxSettings']['timeZone'] if (user['mailboxSettings']['timeZone'] != None) else 'UTC'
-    }
+    request.session['user'] =  str(user)
     return
 
 
