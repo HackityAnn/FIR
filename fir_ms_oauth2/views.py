@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from fir_ms_oauth2.ms_oauth_helper import get_sign_in_flow, get_token_from_code, store_user, remove_user_and_token
-from fir_ms_oauth2.ms_graph_helper import get_user
 
 
 def home(request):
@@ -11,8 +10,7 @@ def home(request):
 
 
 def initialize_context(request):
-    context = {'user': request.session.get(
-        'user', None), 'token_cache': request.session.get('token_cache', None)}
+    context = {'token_cache': request.session.get('token_cache', None)}
     return context
 
 
@@ -31,12 +29,4 @@ def sign_out(request):
 
 
 def redirect(request):
-    # Make the token request
-    result = get_token_from_code(request)
-
-    # Get the user's profile from graph API
-    user = get_user(result['access_token'])
-
-    # Store the user with the helper script
-    store_user(request, user)
     return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
