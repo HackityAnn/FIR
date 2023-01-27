@@ -1,5 +1,5 @@
 <a href="{% url 'fir_ms_oauth2:sign_in' %}">Sign in</a>
 <a href="{% url 'fir_ms_oauth2:sign_out' %}">Sign out</a>
-{% for item in token_cache %}
-    <div> {{ item }}: {{ token_cache[item] }}</div>
+{% for key,value in token_cache.items %}
+    <div> {{ key }}: {{ value }}</div>
 {% endfor %}
