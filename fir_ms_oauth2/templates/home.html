@@ -1,0 +1,5 @@
+<a href="{% url 'signin' %}">Sign in</a>
+<a href="{% url 'signout' %}">Sign out</a>
+{% for item in user %}
+    <div> {{ item }}</div>
+{% endfor %}

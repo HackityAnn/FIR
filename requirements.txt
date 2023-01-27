@@ -18,3 +18,4 @@ git+https://github.com/certsocietegenerale/abuse_finder.git#egg=abuse_finder
 celery[redis]
 redis
 uwsgi
+requests
