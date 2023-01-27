@@ -59,6 +59,9 @@ def store_user(request, user):
 def store_groups(request, groups):
     request.session['groups'] = str(groups)
 
+def store_token(request, token):
+    request.session['token'] = str(token)
+
 def get_token(request):
     cache = load_cache(request)
     auth_app = get_msal_app(cache)
