@@ -29,5 +29,5 @@ def sign_out(request):
 
 
 def redirect(request):
-    result = get_token_from_code(request)
+    get_token_from_code(request)
     return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))

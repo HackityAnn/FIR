@@ -46,10 +46,10 @@ def get_token_from_code(request):
 
     # Get the flow already saved in the session
     flow = request.session.pop('auth_flow', {})
-    result = auth_app.acquire_token_by_auth_code_flow(flow, request.GET)
+    auth_app.acquire_token_by_auth_code_flow(flow, request.GET)
     save_cache(request, cache)
 
-    return result
+    return
 
 
 def store_user(request, user):
