@@ -10,4 +10,3 @@ urlpatterns = [
     re_path(r'^sign_out', views.sign_out, name='sign_out'),
     re_path(r'^redirect', views.redirect, name='redirect'),
 ]
-
