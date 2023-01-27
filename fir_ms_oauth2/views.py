@@ -6,7 +6,7 @@ from fir_ms_oauth2.ms_graph_helper import get_user
 
 def home(request):
     context = initialize_context(request)
-    return render(request, 'fir_ms_oauth2/home.htl', context)
+    return render(request, 'fir_ms_oauth2/home.html', context)
 
 def initialize_context(request):
     context = {'user': request.session.get('user', None)}
