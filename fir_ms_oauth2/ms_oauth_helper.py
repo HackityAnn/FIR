@@ -75,6 +75,4 @@ def get_token(request):
 def remove_user_and_token(request):
     if 'token_cache' in request.session:
         del request.session['token_cache']
-    if 'user' in request.session:
-        del request.session['user']
     return
