@@ -39,12 +39,6 @@ def get_sign_in_flow():
     )
 
 
-def save_cache_after_redirect(request):
-    cache = load_cache(request)
-    request.session['token_cache'] = cache.serialize()
-    return
-
-
 def get_token_from_code(request):
     # Method to exchange auth code for an access token
     cache = load_cache(request)
