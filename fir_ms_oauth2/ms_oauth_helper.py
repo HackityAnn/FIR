@@ -53,14 +53,9 @@ def get_token_from_code(request):
 
 
 def store_user(request, user):
-    request.session['user'] =  str(user)
+    request.session['user'] = str(user)
     return
 
-def store_groups(request, groups):
-    request.session['groups'] = str(groups)
-
-def store_token(request, token):
-    request.session['token'] = str(token)
 
 def get_token(request):
     cache = load_cache(request)
