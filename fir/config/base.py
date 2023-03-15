@@ -24,6 +24,7 @@ except ImportError:
         raise RuntimeWarning(tf_error_message)
     TF_INSTALLED = False
 
+MS_OAUTH2_INSTALLED = True
 
 if TF_INSTALLED:
     LOGIN_URL = 'two_factor:login'
