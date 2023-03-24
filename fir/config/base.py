@@ -25,6 +25,8 @@ except ImportError:
     TF_INSTALLED = False
 
 MS_OAUTH2_INSTALLED = True
+if MS_OAUTH2_INSTALLED:
+    TF_INSTALLED = False
 
 if TF_INSTALLED:
     LOGIN_URL = 'two_factor:login'
