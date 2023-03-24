@@ -24,11 +24,7 @@ except ImportError:
         raise RuntimeWarning(tf_error_message)
     TF_INSTALLED = False
 
-# Configuration needed for SSO with Azure AD
-# We purposefully overwrite TF_INSTALLED here as it gives some issues otherwise with possible dual logins
 MS_OAUTH2_INSTALLED = True
-if MS_OAUTH2_INSTALLED:
-    TF_INSTALLED = False
 
 if TF_INSTALLED:
     LOGIN_URL = 'two_factor:login'
