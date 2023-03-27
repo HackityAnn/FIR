@@ -1,7 +1,9 @@
 import json
 import datetime
 import msal
+from django.contrib.auth import login
 from django.contrib.auth.models import User
+from incidents.models import Profile
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
     oauth_settings = json.load(f)
@@ -53,6 +55,29 @@ def get_token_from_code(request):
 
     return
 
+def get_user_from_request(request):
+    account = json.loads(request.session.get('token_cache'))['Account']
+    user_key = next(iter(account))
+    ms_home_account_id = account[user_key]['home_account_id']
+    try:
+        profile = Profile.objects.get(ms_home_account_id=ms_home_account_id)
+        user = profile.user
+    except Profile.DoesNotExist:
+        username = account[user_key]['username']
+        user = User.objects.create_user(username)
+        user.set_unusable_password()
+        user.save()
+        profile = Profile()
+        profile.user = user
+        profile.ms_home_account_id = ms_home_account_id
+        profile.hide_closed = False
+        profile.incident_number = 50
+        profile.save()
+
+    if user.is_active:
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+    return
 
 def store_user(request, user):
     request.session['user'] = str(user)
