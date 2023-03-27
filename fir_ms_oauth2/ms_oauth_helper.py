@@ -81,12 +81,12 @@ def set_permissions(user: User, token: str) -> None:
     user.save()
     return
 
-def initialize_session(request):
+def initialize_session(request, user):
     # Put all the incident templates in the session
     request.session['incident_templates'] = list(IncidentTemplate.objects.exclude(name='default').values('name'))
     request.session['has_incident_templates'] = len(request.session['incident_templates']) > 0
-    request.session['can_report_event'] = request.user.has_perm('incidents.handle_incidents', obj=Incident) or \
-                                          request.user.has_perm('incidents.report_events', obj=Incident)  
+    request.session['can_report_event'] = user.has_perm('incidents.handle_incidents', obj=Incident) or \
+                                          user.has_perm('incidents.report_events', obj=Incident)  
     return
 
 def get_user_from_request(request):
@@ -112,7 +112,7 @@ def get_user_from_request(request):
     id_user_key = next(iter(id_token_dict))
     id_token = id_token_dict[id_user_key]['secret']
     set_permissions(user, id_token)
-    initialize_session(request)
+    initialize_session(request, user)
 
     if user.is_active:
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
