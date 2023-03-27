@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from fir_ms_oauth2.ms_oauth_helper import get_sign_in_flow, remove_user_and_token, get_token_from_code
+from fir_ms_oauth2.ms_oauth_helper import get_sign_in_flow, remove_user_and_token, get_token_from_code, store_user
 
 
 def home(request):

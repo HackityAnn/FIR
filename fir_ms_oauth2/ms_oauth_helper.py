@@ -1,4 +1,5 @@
 import json
+import datetime
 import msal
 from django.contrib.auth.models import User
 # Load the oauth settings
@@ -18,6 +19,7 @@ def save_cache(request, cache):
     # If cache changes we want to save it back to the session
     if cache.has_state_changed:
         request.session['token_cache'] = cache.serialize()
+        request.session.set_expiry(0)
 
 
 def get_msal_app(cache=None):
@@ -39,12 +41,6 @@ def get_sign_in_flow():
         redirect_uri=oauth_settings['redirect']
     )
 
-def create_request_user(request) -> None:
-    request.user = User(
-        username = 'Testuser'
-    )
-    return
-
 def get_token_from_code(request):
     # Method to exchange auth code for an access token
     cache = load_cache(request)
@@ -53,7 +49,6 @@ def get_token_from_code(request):
     # Get the flow already saved in the session
     flow = request.session.pop('auth_flow', {})
     auth_app.acquire_token_by_auth_code_flow(flow, request.GET)
-    create_request_user(request)
     save_cache(request, cache)
 
     return

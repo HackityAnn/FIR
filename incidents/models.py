@@ -66,6 +66,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     incident_number = models.IntegerField(default=50)
     hide_closed = models.BooleanField(default=False)
+    ms_home_account_id = models.CharField(unique=True, null=True)
 
     def __str__(self):
         return u"Profile for user '{}'".format(self.user)
