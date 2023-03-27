@@ -1,8 +1,8 @@
 import json
-import datetime
+import base64
 import msal
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from incidents.models import Profile
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
@@ -55,6 +55,33 @@ def get_token_from_code(request):
 
     return
 
+def get_roles_from_token(token: str) -> list:
+    role_part_of_token = token.split('.')[1]
+    payload = json.loads(base64.b64decode(role_part_of_token))
+    return payload['roles']
+
+def get_group_from_oauth_role(role):
+    roles_mapping = {
+        'FIR.incident_responder': 'Incident handlers',
+        'FIR.entity': 'Incident handlers',
+        'FIR.entity_read_only': 'Statistics and incident viewers',
+        'FIR.read_only': 'Statistics and incident viewers',
+        'FIR.admin': 'Incident handlers'
+    }
+    return Group.objects.get(name=roles_mapping[role])
+
+def set_permissions(user: User, token: str) -> None:
+    roles = get_roles_from_token(token=token)
+    user.groups.clear()
+    user.user_permissions.clear()
+    for role in roles:
+        user.groups.add(get_group_from_oauth_role(role))
+        if role == 'FIR.admin':
+            user.is_superuser = True
+    user.save()
+    return
+
+
 def get_user_from_request(request):
     account = json.loads(request.session.get('token_cache'))['Account']
     user_key = next(iter(account))
@@ -73,6 +100,11 @@ def get_user_from_request(request):
         profile.hide_closed = False
         profile.incident_number = 50
         profile.save()
+
+    id_token_dict = json.loads(request.session.get('token_cache'))['IdToken']
+    id_user_key = next(iter(id_token_dict))
+    id_token = id_token_dict[id_user_key]['secret']
+    set_permissions(user, id_token)
 
     if user.is_active:
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
