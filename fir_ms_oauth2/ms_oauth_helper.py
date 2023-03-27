@@ -3,7 +3,7 @@ import base64
 import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
-from incidents.models import Profile
+from incidents.models import Profile, IncidentTemplate, Incident
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
     oauth_settings = json.load(f)
@@ -81,6 +81,13 @@ def set_permissions(user: User, token: str) -> None:
     user.save()
     return
 
+def initialize_session(request):
+    # Put all the incident templates in the session
+    request.session['incident_templates'] = list(IncidentTemplate.objects.exclude(name='default').values('name'))
+    request.session['has_incident_templates'] = len(request.session['incident_templates']) > 0
+    request.session['can_report_event'] = request.user.has_perm('incidents.handle_incidents', obj=Incident) or \
+                                          request.user.has_perm('incidents.report_events', obj=Incident)  
+    return
 
 def get_user_from_request(request):
     account = json.loads(request.session.get('token_cache'))['Account']
@@ -105,6 +112,7 @@ def get_user_from_request(request):
     id_user_key = next(iter(id_token_dict))
     id_token = id_token_dict[id_user_key]['secret']
     set_permissions(user, id_token)
+    initialize_session(request)
 
     if user.is_active:
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
