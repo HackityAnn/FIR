@@ -30,8 +30,8 @@ else:
 
 
 if MS_OAUTH2_INSTALLED:
-    LOGIN_URL = '/sign_in/'
-    LOGOUT_URL = '/sign_out/'
+    LOGIN_URL = '/ms_oauth2/sign_in/'
+    LOGOUT_URL = '/ms_oauth2/sign_out/'
 elif TF_INSTALLED:
     LOGIN_URL = 'two_factor:login'
     LOGIN_REDIRECT_URL = 'two_factor:profile'
