@@ -1,5 +1,6 @@
 import json
 import msal
+from django.contrib.auth.models import User
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
     oauth_settings = json.load(f)
@@ -38,6 +39,11 @@ def get_sign_in_flow():
         redirect_uri=oauth_settings['redirect']
     )
 
+def create_request_user(request) -> None:
+    request.user = User(
+        username = 'Testuser'
+    )
+    return
 
 def get_token_from_code(request):
     # Method to exchange auth code for an access token
@@ -47,6 +53,7 @@ def get_token_from_code(request):
     # Get the flow already saved in the session
     flow = request.session.pop('auth_flow', {})
     auth_app.acquire_token_by_auth_code_flow(flow, request.GET)
+    create_request_user(request)
     save_cache(request, cache)
 
     return

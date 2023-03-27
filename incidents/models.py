@@ -415,3 +415,4 @@ def log_new_incident(sender, instance, created, **kwargs):
         what = 'Edit incident'
 
     Log.objects.create(who=instance.opened_by, what=what, incident=instance)
+
