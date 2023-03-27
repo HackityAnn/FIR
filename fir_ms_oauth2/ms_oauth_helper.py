@@ -1,7 +1,7 @@
 import json
 import datetime
 import msal
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from incidents.models import Profile
 # Load the oauth settings
@@ -100,6 +100,5 @@ def get_token(request):
 
 
 def remove_user_and_token(request):
-    if 'token_cache' in request.session:
-        del request.session['token_cache']
+    logout(request)
     return
