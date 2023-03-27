@@ -219,7 +219,6 @@ def user_logout(request):
         return redirect('login')
 
 def init_session(request):
-    pass
     # Put all the incident templates in the session
     request.session['incident_templates'] = list(IncidentTemplate.objects.exclude(name='default').values('name'))
     request.session['has_incident_templates'] = len(request.session['incident_templates']) > 0
