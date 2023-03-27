@@ -15,18 +15,24 @@ ENFORCE_2FA = bool(strtobool(os.getenv('ENFORCE_2FA', 'False')))
 tf_error_message = """Django two factor is not installed and ENFORCE_2FA is set to True.
 Either set ENFORCE_2FA to False or pip install django-two-factor-auth
 """
-
-try:
-    import two_factor
-    TF_INSTALLED = True
-except ImportError:
-    if ENFORCE_2FA:
-        raise RuntimeWarning(tf_error_message)
-    TF_INSTALLED = False
-
 MS_OAUTH2_INSTALLED = True
 
-if TF_INSTALLED:
+if not MS_OAUTH2_INSTALLED:
+    try:
+        import two_factor
+        TF_INSTALLED = True
+    except ImportError:
+        if ENFORCE_2FA:
+            raise RuntimeWarning(tf_error_message)
+        TF_INSTALLED = False
+else:
+    TF_INSTALLED = False
+
+
+if MS_OAUTH2_INSTALLED:
+    LOGIN_URL = '/sign_in/'
+    LOGOUT_URL = '/sign_out/'
+elif TF_INSTALLED:
     LOGIN_URL = 'two_factor:login'
     LOGIN_REDIRECT_URL = 'two_factor:profile'
 else:
