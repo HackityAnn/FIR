@@ -10,7 +10,7 @@ def home(request):
 
 
 def initialize_context(request):
-    context = {'token_cache': request.session.get('token_cache', None)}
+    context = {'token_cache': request.session.get('token_cache', None), 'user_businessline': request.session.get('user_businessline', None)}
     return context
 
 

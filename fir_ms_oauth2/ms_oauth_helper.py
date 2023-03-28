@@ -90,7 +90,7 @@ def initialize_session(request, user, user_businessline):
     request.session['has_incident_templates'] = len(request.session['incident_templates']) > 0
     request.session['can_report_event'] = user.has_perm('incidents.handle_incidents', obj=Incident) or \
                                           user.has_perm('incidents.report_events', obj=Incident)
-    if user.objects.filter(groups_name_in=['FIR.entity', 'FIR.entity_read_only']):
+    if user.groups.filter(name__in=['FIR.entity', 'FIR.entity_read_only']):
         request.session['user_businessline'] = user_businessline
     return
 
