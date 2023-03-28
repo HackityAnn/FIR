@@ -81,8 +81,9 @@ def set_permissions(user: User, token: str) -> None:
 def get_businessline_from_graph_api(token: str):
     graph_url_me = 'https://graph.microsoft.com/v1.0/me'
     headers = {'Authorization': f'Bearer {token}'}
-    user = requests.get(graph_url_me, headers=headers).json()
-    return user
+    params = {'$select': 'companyName'}
+    businessline = requests.get(graph_url_me, headers=headers, params=params).json()['companyName']
+    return businessline
 
 def initialize_session(request, user, user_businessline):
     # Put all the incident templates in the session
