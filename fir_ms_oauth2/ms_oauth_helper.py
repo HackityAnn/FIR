@@ -70,7 +70,11 @@ def set_permissions(user: User, token: str) -> None:
         if role == 'FIR.admin':
             user.is_superuser = True
         else:
-            user.groups.add(role)
+            try:
+                group = Group.objects.get(name=role)
+                user.groups.add(group)
+            except Group.DoesNotExist:
+                pass
     user.save()
     return
 
