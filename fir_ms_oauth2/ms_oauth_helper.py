@@ -71,6 +71,7 @@ def set_permissions(user: User, token: str) -> None:
     for role in roles:
         if role == 'FIR.admin':
             user.is_superuser = True
+            user.is_staff = True
         else:
             try:
                 group = Group.objects.get(name=role)
