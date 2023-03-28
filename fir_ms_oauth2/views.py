@@ -25,7 +25,7 @@ def sign_in(request):
 
 def sign_out(request):
     # Clear token and user
-    log('Logout initiated', user=request.user)
+    log(f'Logout initiated for SSO user: {request.user.username}', user=request.user)
     remove_user_and_token(request)
     return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
 
@@ -33,5 +33,5 @@ def sign_out(request):
 def redirect(request):
     get_token_from_code(request)
     get_user_from_request(request)
-    log('Login success', user=request.user)
+    log(f'Login success for SSO user: {request.user.username}', user=request.user)
     return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
