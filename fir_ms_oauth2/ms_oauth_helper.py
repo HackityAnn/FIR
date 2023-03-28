@@ -5,7 +5,6 @@ import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
 from incidents.models import Profile, IncidentTemplate, Incident
-from incidents.views import log
 # Load the oauth settings
 with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
     oauth_settings = json.load(f)
@@ -130,7 +129,6 @@ def get_user_from_request(request):
     initialize_session(request, user, user_businessline)
 
     if user.is_active:
-        log('Login success', user=user)
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     return
 
