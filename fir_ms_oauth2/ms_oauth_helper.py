@@ -68,6 +68,7 @@ def set_permissions(user: User, token: str) -> None:
     user.groups.clear()
     user.user_permissions.clear()
     user.is_superuser = False
+    user.is_staff = False
     for role in roles:
         if role == 'FIR.admin':
             user.is_superuser = True
