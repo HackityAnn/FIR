@@ -539,7 +539,7 @@ def delete_attribute(request, incident_id, attribute_id, authorization_target=No
 # comments ==================================================================
 
 @fir_auth_required
-@authorization_required('incidents.handle_incidents', Incident, view_arg='incident_id')
+@user_passes_test(is_incident_reporter)
 def edit_comment(request, incident_id, comment_id):
     c = get_object_or_404(Comments, pk=comment_id, incident_id=incident_id)
     i = c.incident
@@ -570,7 +570,7 @@ def edit_comment(request, incident_id, comment_id):
 
 
 @fir_auth_required
-@authorization_required('incidents.handle_incidents', Incident, view_arg='incident_id')
+@user_passes_test(is_incident_reporter)
 def delete_comment(request, incident_id, comment_id):
     c = get_object_or_404(Comments, pk=comment_id, incident_id=incident_id)
     i = c.incident
@@ -586,7 +586,7 @@ def delete_comment(request, incident_id, comment_id):
 
 
 @fir_auth_required
-@authorization_required('incidents.handle_incidents', Incident, view_arg='incident_id')
+@user_passes_test(is_incident_reporter)
 def update_comment(request, comment_id):
     c = get_object_or_404(Comments, pk=comment_id)
     i = c.incident
