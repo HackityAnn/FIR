@@ -60,24 +60,16 @@ def get_roles_from_token(token: str) -> list:
     payload = json.loads(base64.b64decode(role_part_of_token))
     return payload['roles']
 
-def get_group_from_oauth_role(role):
-    roles_mapping = {
-        'FIR.incident_responder': 'Incident handlers',
-        'FIR.entity': 'Incident handlers',
-        'FIR.entity_read_only': 'Statistics and incident viewers',
-        'FIR.read_only': 'Statistics and incident viewers',
-        'FIR.admin': 'Incident handlers'
-    }
-    return Group.objects.get(name=roles_mapping[role])
-
 def set_permissions(user: User, token: str) -> None:
     roles = get_roles_from_token(token=token)
     user.groups.clear()
     user.user_permissions.clear()
+    user.is_superuser = False
     for role in roles:
-        user.groups.add(get_group_from_oauth_role(role))
         if role == 'FIR.admin':
             user.is_superuser = True
+        else:
+            user.groups.add(role)
     user.save()
     return
 
