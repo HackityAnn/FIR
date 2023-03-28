@@ -212,7 +212,7 @@ def user_login(request):
 
 def user_logout(request):
     if MS_OAUTH2_INSTALLED:
-        return redirect('ms_oauth2.sign_out')
+        return redirect('/ms_oauth2/sign_out')
     logout(request)
     request.session.flush()
     if TF_INSTALLED:
