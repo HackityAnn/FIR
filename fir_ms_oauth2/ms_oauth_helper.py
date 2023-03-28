@@ -58,7 +58,9 @@ def get_token_from_code(request):
 
 def get_roles_from_token(token: str) -> list:
     role_part_of_token = token.split('.')[1]
-    payload = json.loads(base64.b64decode(role_part_of_token))
+    # Add the maximum base64 padding just to make sure you never get
+    # an padding error
+    payload = json.loads(base64.b64decode(role_part_of_token+'=='))
     return payload['roles']
 
 def set_permissions(user: User, token: str) -> None:
