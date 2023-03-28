@@ -14,7 +14,7 @@ from incidents.models import Attribute, ValidAttribute, IncidentTemplate, Profil
 from incidents.forms import IncidentForm, CommentForm
 
 from incidents.authorization.decorator import authorization_required
-from fir.config.base import INSTALLED_APPS, ENFORCE_2FA, TF_INSTALLED
+from fir.config.base import INSTALLED_APPS, ENFORCE_2FA, TF_INSTALLED, MS_OAUTH2_INSTALLED
 import importlib
 
 from django.contrib.auth import authenticate, login, logout
@@ -213,7 +213,9 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     request.session.flush()
-    if TF_INSTALLED:
+    if MS_OAUTH2_INSTALLED:
+        return redirect('ms_oauth2/sign_in')
+    elif TF_INSTALLED:
         return redirect('two_factor:login')
     else:
         return redirect('login')
