@@ -117,7 +117,10 @@ def get_user_from_request(request):
     id_user_key = next(iter(id_token_dict))
     id_token = id_token_dict[id_user_key]['secret']
     set_permissions(user, id_token)
-    user_businessline = get_businessline_from_graph_api(id_token)
+    access_token_dict = json.loads(request.session.get('token_cache'))['AccessToken']
+    access_user_key = next(iter(access_token_dict))
+    access_token = access_token_dict[access_user_key]['secret']
+    user_businessline = get_businessline_from_graph_api(access_token)
     initialize_session(request, user, user_businessline)
 
     if user.is_active:
