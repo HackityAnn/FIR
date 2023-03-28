@@ -211,11 +211,11 @@ def user_login(request):
 
 
 def user_logout(request):
+    if MS_OAUTH2_INSTALLED:
+        return redirect('ms_oauth2.sign_out')
     logout(request)
     request.session.flush()
-    if MS_OAUTH2_INSTALLED:
-        return redirect('/')
-    elif TF_INSTALLED:
+    if TF_INSTALLED:
         return redirect('two_factor:login')
     else:
         return redirect('login')
