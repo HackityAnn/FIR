@@ -214,7 +214,7 @@ def user_logout(request):
     logout(request)
     request.session.flush()
     if MS_OAUTH2_INSTALLED:
-        return redirect('ms_oauth2/sign_in')
+        return redirect('/')
     elif TF_INSTALLED:
         return redirect('two_factor:login')
     else:
