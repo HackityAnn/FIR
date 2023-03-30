@@ -32,7 +32,7 @@ class UserAdmin(auth_admin.UserAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.has_usable_password():
             return
-        if not form['password1']:
+        if not form.cleaned_data['password1']:
             obj.set_unusable_password()
             obj.save()
             return
