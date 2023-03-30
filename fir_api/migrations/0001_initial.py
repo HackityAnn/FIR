@@ -17,9 +17,6 @@ class Migration(migrations.Migration):
             ('jwks_uri', models.CharField(max_length=512)),
             ('aud', models.CharField(max_length=512)),
             ('iss', models.CharField(max_length=512)),
-        ],
-        options={
-            'db_table': 'fir_api_oauth2_config',
-        },
+        ]
         )
     ]
