@@ -40,6 +40,7 @@ class OAuth2JWTAuthentication(authentication.BaseAuthentication):
     """
     JWT authentication focussed and tested on implementation
     with Azure AD
+    Token is expected to be in the Authorization header with Bearer as prefix
     """
 
     def __init__(self):
