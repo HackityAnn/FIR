@@ -80,7 +80,7 @@ class OAuth2JWTAuthentication(authentication.BaseAuthentication):
         except Oauth2API.DoesNotExist:
             msg = f'App ID: {token_app_id} is not configured on the backend yet'
             raise exceptions.AuthenticationFailed(msg)
-        jwks_client = PyJWKClient(app_id_configuration['jwks_uri'])
+        jwks_client = PyJWKClient(app_id_configuration.jwks_uri)
         signing_key = jwks_client.get_signing_key_from_jwt(token)
         verification = {
             'verify_signature': True,
@@ -95,8 +95,8 @@ class OAuth2JWTAuthentication(authentication.BaseAuthentication):
             payload = jwt.decode(token,
                                 key=signing_key,
                                 algorithms=['RS256'],
-                                audience=app_id_configuration['aud'],
-                                issuer=app_id_configuration['iss'],
+                                audience=app_id_configuration.aud,
+                                issuer=app_id_configuration.iss,
                                 options=verification)
         except self.jwt_validation_exceptions as e:
             msg = f'Failed to validate JWT with exception {e.args[0]}'
