@@ -1,7 +1,8 @@
 from incidents.models import *
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin, get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm 
+from django.core.exceptions import ValidationError
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
@@ -23,9 +24,40 @@ class PasswordlessUserCreationForm(UserCreationForm):
         self.fields['password1'].required = False
         self.fields['password2'].required = False
 
+class AdminPasswordChangeFormNoUnusablePasswords(AdminPasswordChangeForm):
+    """
+    Do not allow admins to change passwords
+    for accounts that are created with unusable passwords
+    as this could lead to persistent accounts after
+    disabling them in AD
+    """
+
+    def save(self, commit=True):
+        """
+        Only save the password if the user
+        had usable password to begin with
+        """
+        if not self.user.has_usable_password():
+            raise ValidationError(
+                self.error_messages['User has unusable password set and cannot be reset'],
+                code='unusable_password_cannot_be_reset'
+            )
+
+        """
+        Original code for save
+        ---------------------
+        Save the new password.
+        """
+        password = self.cleaned_data["password1"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user
+
 
 class UserAdmin(auth_admin.UserAdmin):
     add_form = PasswordlessUserCreationForm
+    change_password_form = AdminPasswordChangeFormNoUnusablePasswords
     inlines = [ACENestedAdmin, ]
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
 
