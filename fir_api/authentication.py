@@ -93,7 +93,7 @@ class OAuth2JWTAuthentication(authentication.BaseAuthentication):
         }
         try:
             payload = jwt.decode(token,
-                                key=signing_key,
+                                key=signing_key.key,
                                 algorithms=['RS256'],
                                 audience=app_id_configuration.aud,
                                 issuer=app_id_configuration.iss,
