@@ -1,7 +1,7 @@
 from incidents.models import *
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin, get_user_model
-from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm 
+from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
 from django.core.exceptions import ValidationError
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
@@ -16,13 +16,24 @@ class PasswordlessUserCreationForm(UserCreationForm):
     """
     Class to overwrite UserCreationForm so we
     can put password to not required
-    for passwordless accounts
+    for passwordless accounts and they are
+    saved with unusable password
     """
 
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
         self.fields['password1'].required = False
         self.fields['password2'].required = False
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if not self.cleaned_data['password1']:
+            user.set_unusable_password()
+        if commit:
+            user.save()
+            if hasattr(self, 'save_m2m'):
+                self.save_m2m()
+        return user
 
 class AdminPasswordChangeFormNoUnusablePasswords(AdminPasswordChangeForm):
     """
@@ -64,17 +75,6 @@ class UserAdmin(auth_admin.UserAdmin):
     change_password_form = AdminPasswordChangeFormNoUnusablePasswords
     inlines = [ACENestedAdmin, ]
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
-
-    def save_model(self, request, obj, form, change):
-        if not obj.has_usable_password():
-            return
-        if not form.cleaned_data['password1']:
-            obj.set_unusable_password()
-            obj.save()
-            return
-        else:
-            obj.save()
-            return
 
 
 class BusinessLineAdmin(TreeAdmin):
