@@ -34,4 +34,4 @@ def redirect(request):
     get_token_from_code(request)
     get_user_from_request(request)
     log(f'Login success for SSO user: {request.user.username}', user=request.user)
-    return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
+    return HttpResponseRedirect(reverse('/'))
