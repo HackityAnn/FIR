@@ -5,7 +5,7 @@ import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
 from incidents.models import Profile, IncidentTemplate, Incident
-from fir_api.settings import SCOPES, APP_ID, APP_SECRET, REDIRECT, AUTH_URL
+from fir_ms_oauth2.settings import SCOPES, APP_ID, APP_SECRET, REDIRECT, AUTH_URL
 # Load the oauth settings
 oauth_settings = {
     'scopes': json.loads(SCOPES),
