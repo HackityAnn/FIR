@@ -5,7 +5,7 @@ REST_FRAMEWORK = {
     # replace fir_api.authentication.TokenAuthentication with rest_framework.authentication.TokenAuthentication
     # and delete the OAuth2JWTAuthentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'fir_api.authentication.Oauth2JWTAuthentication',
+        'fir_api.authentication.OAuth2JWTAuthentication',
         'fir_api.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
         ),
