@@ -5,16 +5,6 @@ from fir_ms_oauth2.ms_oauth_helper import get_sign_in_flow, remove_user_and_toke
 from incidents.views import log
 
 
-def home(request):
-    context = initialize_context(request)
-    return render(request, 'fir_ms_oauth2/home.html', context)
-
-
-def initialize_context(request):
-    context = {'token_cache': request.session.get('token_cache', None), 'user_businessline': request.session.get('user_businessline', None)}
-    return context
-
-
 def sign_in(request):
     # Get the sign in flow
     flow = get_sign_in_flow()
@@ -27,7 +17,7 @@ def sign_out(request):
     # Clear token and user
     log(f'Logout initiated for SSO user: {request.user.username}', user=request.user)
     remove_user_and_token(request)
-    return HttpResponseRedirect(reverse('fir_ms_oauth2:home'))
+    return HttpResponseRedirect(reverse('/'))
 
 
 def redirect(request):
