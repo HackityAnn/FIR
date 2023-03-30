@@ -5,9 +5,15 @@ import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
 from incidents.models import Profile, IncidentTemplate, Incident
+from fir_api.settings import SCOPES, APP_ID, APP_SECRET, REDIRECT, AUTH_URL
 # Load the oauth settings
-with open('fir_ms_oauth2/oauth_settings.json', 'r') as f:
-    oauth_settings = json.load(f)
+oauth_settings = {
+    'scopes': SCOPES,
+    'app_id': APP_ID,
+    'app_secret': APP_SECRET,
+    'redirect': REDIRECT,
+    'auth_url': AUTH_URL
+}
 
 
 def load_cache(request):
