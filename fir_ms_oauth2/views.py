@@ -17,11 +17,11 @@ def sign_out(request):
     # Clear token and user
     log(f'Logout initiated for SSO user: {request.user.username}', user=request.user)
     remove_user_and_token(request)
-    return HttpResponseRedirect(reverse('/'))
+    return HttpResponseRedirect('/')
 
 
 def redirect(request):
     get_token_from_code(request)
     get_user_from_request(request)
     log(f'Login success for SSO user: {request.user.username}', user=request.user)
-    return HttpResponseRedirect(reverse('/'))
+    return HttpResponseRedirect('/')
