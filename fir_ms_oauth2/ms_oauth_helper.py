@@ -67,6 +67,7 @@ def set_permissions(user: User, token: str) -> None:
     roles = get_roles_from_token(token=token)
     user.groups.clear()
     user.user_permissions.clear()
+    user.set_unusable_password()
     user.is_superuser = False
     user.is_staff = False
     for role in roles:
@@ -109,7 +110,6 @@ def get_user_from_request(request):
     except Profile.DoesNotExist:
         username = account[user_key]['username']
         user = User.objects.create_user(username)
-        user.set_unusable_password()
         user.save()
         profile = Profile()
         profile.user = user
