@@ -38,8 +38,9 @@ class AdminPasswordChangeFormNoUnusablePasswords(AdminPasswordChangeForm):
         had usable password to begin with
         """
         if not self.user.has_usable_password():
+            self.update_errors()
             raise ValidationError(
-                self.error_messages['User has unusable password set and cannot be reset'],
+                self.error_messages[f'User {self.user.username} has unusable password set and cannot be reset'],
                 code='unusable_password_cannot_be_reset'
             )
 
@@ -56,6 +57,10 @@ class AdminPasswordChangeFormNoUnusablePasswords(AdminPasswordChangeForm):
 
 
 class UserAdmin(auth_admin.UserAdmin):
+    """
+    The UserAdmin class with some small changes
+    compared to the normal UserAdmin
+    """
     add_form = PasswordlessUserCreationForm
     change_password_form = AdminPasswordChangeFormNoUnusablePasswords
     inlines = [ACENestedAdmin, ]
