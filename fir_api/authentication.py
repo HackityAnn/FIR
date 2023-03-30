@@ -8,7 +8,7 @@ from jwt import PyJWKClient
 import jwt.exceptions as jexcept
 from rest_framework import authentication, exceptions
 from rest_framework.settings import api_settings
-from models import Oauth2API
+from fir_api.models import Oauth2API
 from incidents.models import User
 
 class TokenAuthentication(authentication.TokenAuthentication):
