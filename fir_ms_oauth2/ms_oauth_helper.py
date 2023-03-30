@@ -8,7 +8,7 @@ from incidents.models import Profile, IncidentTemplate, Incident
 from fir_api.settings import SCOPES, APP_ID, APP_SECRET, REDIRECT, AUTH_URL
 # Load the oauth settings
 oauth_settings = {
-    'scopes': SCOPES,
+    'scopes': json.loads(SCOPES),
     'app_id': APP_ID,
     'app_secret': APP_SECRET,
     'redirect': REDIRECT,
