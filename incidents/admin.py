@@ -29,6 +29,17 @@ class UserAdmin(auth_admin.UserAdmin):
     inlines = [ACENestedAdmin, ]
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
 
+    def save_model(self, request, obj, form, change):
+        if not obj.has_usable_password():
+            return
+        if not form['password1']:
+            obj.set_unusable_password()
+            obj.save()
+            return
+        else:
+            obj.save()
+            return
+
 
 class BusinessLineAdmin(TreeAdmin):
     search_fields = ('name', )
