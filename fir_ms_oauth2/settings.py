@@ -1,6 +1,5 @@
 import os
 
-SCOPES = os.environ.get('FIR_OAUTH_SCOPES', None)
 APP_ID = os.environ.get('FIR_OAUTH_APP_ID', None)
 APP_SECRET = os.environ.get('FIR_OAUTH_APP_SECRET', None)
 REDIRECT = os.environ.get('FIR_OAUTH_REDIRECT', None)
