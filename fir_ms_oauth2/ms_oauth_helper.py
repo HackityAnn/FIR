@@ -86,11 +86,17 @@ def set_permissions(user: User, token: str, user_businessline: list) -> None:
             try:
                 businessline = BusinessLine.objects.get(name=user_businessline)
                 access_control_role = Group.objects.get(name=role)
-                access_control = AccessControlEntry()
-                access_control.user = user
-                access_control.business_line = businessline
-                access_control.role = access_control_role
-                access_control.save()
+                try:
+                    access_control = AccessControlEntry.objects.get(user=user, business_line=businessline)
+                    if not access_control.role == access_control_role:
+                        access_control.role = access_control_role
+                        access_control.save()
+                except AccessControlEntry.DoesNotExist:
+                    access_control = AccessControlEntry()
+                    access_control.user = user
+                    access_control.business_line = businessline
+                    access_control.role = access_control_role
+                    access_control.save()
             except BusinessLine.DoesNotExist:
                 pass
             except Group.DoesNotExist:
