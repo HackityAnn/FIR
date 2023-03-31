@@ -5,7 +5,7 @@ import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
 from django.conf import settings
-from incidents.models import Profile, IncidentTemplate, Incident
+from incidents.models import Profile, IncidentTemplate, Incident, BusinessLine, AccessControlEntry
 
 # Load the oauth settings
 oauth_settings = {
@@ -71,7 +71,7 @@ def get_roles_from_token(token: str) -> list:
     payload = json.loads(base64.b64decode(role_part_of_token+'=='))
     return payload['roles']
 
-def set_permissions(user: User, token: str) -> None:
+def set_permissions(user: User, token: str, user_businessline: list) -> None:
     roles = get_roles_from_token(token=token)
     user.groups.clear()
     user.user_permissions.clear()
@@ -82,6 +82,16 @@ def set_permissions(user: User, token: str) -> None:
         if role == 'FIR.admin':
             user.is_superuser = True
             user.is_staff = True
+        if role.startswith('FIR.entity'):
+            try:
+                businessline = BusinessLine.objects.get(user_businessline)
+                access_control_role = Group.object.get(name=role)
+                access_control = AccessControlEntry(businessline=businessline, role=access_control_role, user=user)
+                access_control.save()
+            except BusinessLine.DoesNotExist:
+                pass
+            except Group.DoesNotExist:
+                pass
         else:
             try:
                 group = Group.objects.get(name=role)
@@ -91,7 +101,7 @@ def set_permissions(user: User, token: str) -> None:
     user.save()
     return
 
-def get_businessline_from_graph_api(token: str):
+def get_businessline_from_graph_api(token: str) -> str:
     graph_url_me = 'https://graph.microsoft.com/v1.0/me'
     headers = {'Authorization': f'Bearer {token}'}
     params = {'$select': 'companyName'}
@@ -104,8 +114,6 @@ def initialize_session(request, user, user_businessline):
     request.session['has_incident_templates'] = len(request.session['incident_templates']) > 0
     request.session['can_report_event'] = user.has_perm('incidents.handle_incidents', obj=Incident) or \
                                           user.has_perm('incidents.report_events', obj=Incident)
-    if user.groups.filter(name__in=['FIR.entity', 'FIR.entity_read_only']):
-        request.session['user_businessline'] = user_businessline
     return
 
 def get_user_from_request(request):
@@ -129,11 +137,11 @@ def get_user_from_request(request):
     id_token_dict = json.loads(request.session.get('token_cache'))['IdToken']
     id_user_key = next(iter(id_token_dict))
     id_token = id_token_dict[id_user_key]['secret']
-    set_permissions(user, id_token)
     access_token_dict = json.loads(request.session.get('token_cache'))['AccessToken']
     access_user_key = next(iter(access_token_dict))
     access_token = access_token_dict[access_user_key]['secret']
     user_businessline = get_businessline_from_graph_api(access_token)
+    set_permissions(user, id_token, user_businessline)
     initialize_session(request, user, user_businessline)
 
     if user.is_active:
