@@ -85,7 +85,7 @@ def set_permissions(user: User, token: str, user_businessline: list) -> None:
         if role.startswith('FIR.entity'):
             try:
                 businessline = BusinessLine.objects.get(name=user_businessline)
-                access_control_role = Group.object.get(name=role)
+                access_control_role = Group.objects.get(name=role)
                 access_control = AccessControlEntry(businessline=businessline, role=access_control_role, user=user)
                 access_control.save()
             except BusinessLine.DoesNotExist:
