@@ -98,7 +98,7 @@ def can_view_statistics(user):
     return user.has_perm('incidents.view_statistics', obj=Incident)
 
 
-comment_permissions = ['incidents.handle_incidents', 'comments.change_comments']
+comment_permissions = ['incidents.handle_incidents', 'incidents.change_comments']
 if getattr(settings, 'INCIDENT_VIEWER_CAN_COMMENT', False):
     comment_permissions.append('incidents.view_incidents')
 
