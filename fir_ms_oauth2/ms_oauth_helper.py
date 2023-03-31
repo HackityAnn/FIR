@@ -4,15 +4,16 @@ import base64
 import msal
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User, Group
+from django.conf import settings
 from incidents.models import Profile, IncidentTemplate, Incident
-from fir_ms_oauth2.settings import APP_ID, APP_SECRET, REDIRECT, AUTH_URL
+
 # Load the oauth settings
 oauth_settings = {
     'scopes': [],
-    'app_id': APP_ID,
-    'app_secret': APP_SECRET,
-    'redirect': REDIRECT,
-    'auth_url': AUTH_URL
+    'app_id': settings.APP_ID,
+    'app_secret': settings.APP_SECRET,
+    'redirect': settings.REDIRECT,
+    'auth_url': settings.AUTH_URL
 }
 
 
@@ -33,6 +34,7 @@ def save_cache(request, cache):
 
 def get_msal_app(cache=None):
     # Initialize the msal client app
+    
     auth_app = msal.ConfidentialClientApplication(
         oauth_settings['app_id'],
         authority=oauth_settings['auth_url'],

@@ -38,7 +38,7 @@ EMAIL_FROM = '"FIR" <fir@wealot.nl>'
 # EMAIL_BCC = ['address@email']
 
 # SECRET KEY
-SECRET_KEY = 'supersecretkey'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 ################################################################
 
@@ -91,3 +91,9 @@ INCIDENT_ID_PREFIX = env('INCIDENT_ID_PREFIX', "FIR-")
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 5
+
+# Oauth config
+APP_ID = env('FIR_OAUTH_APP_ID', None)
+APP_SECRET = env('FIR_OAUTH_APP_SECRET', None)
+REDIRECT = env('FIR_OAUTH_REDIRECT', None)
+AUTH_URL = env('FIR_OAUTH_AUTH_URL', None)
